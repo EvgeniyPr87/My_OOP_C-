@@ -6,31 +6,13 @@ using std::endl;
 using std::string;
 using std::cerr;// стандартный поток ошибок
 
-class Day
+//функция проверяет является ли год високосным
+bool isLeapYear(int year)
 {
-	int day;
-public:
-	//функция проверяет вхождение в диапазон даты
-	bool is_valid()const
-	{
-		return day > 0 && day < 32;
-	}
-public:
-	//класс неверный день
-	class InvalidDay {};
-	// в конструкторе проверяем является дата верной
-	explicit Day(int d):day(d) 
-	{
-		if (!is_valid())
-		{
-			throw InvalidDay();
-		}
-	}
-	~Day() {};
-	friend std::ostream& operator<<(std::ostream& os, const Day& d) {
-		return os << d.day;
-	}
-};
+	return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+}
+
+
 
 enum  class Month
 {
@@ -59,6 +41,8 @@ class Year
 	int year;
 
 public:
+	int get_year()const { return year; }
+
 	bool is_valid()const
 	{
 		return year >= 0;
@@ -73,10 +57,39 @@ public:
 	}
 	}
 	~Year() {};
-	friend std::ostream& operator<<(std::ostream& os, const Year& y) {
-		return os << y.year;
-	}
 };
+	std::ostream& operator<<(std::ostream& os, const Year& obj) {
+		return os << obj.get_year();
+	}
+	class Day
+	{
+		int day;
+	public:
+		int get_day()const { return day; }
+		//функция проверяет вхождение в диапазон даты
+		bool is_valid(Month month, int year)const
+		{
+			int maxDays = 31;// количество дней по умолчанию
+
+			switch (month) {
+			case Month::Feb:maxDays = isLeapYear(year) ? 29 : 28; break;
+			case Month::Apr:
+			case Month::Jun:
+			case Month::Sep:
+			case Month::Nov:maxDays = 30; break;
+			default: break;
+			}
+			return day > 0 && day <= maxDays;
+		}
+	public:
+
+		explicit Day(int d) :day(d) {}
+
+		~Day() {};
+	};
+	std::ostream& operator<<(std::ostream& os, const Day& obj) {
+		return os << obj.get_day();
+	}
 
 class Date
 {
@@ -85,6 +98,12 @@ class Date
 	Year year;
 
 public:
+	class InvalidDay : public std::runtime_error
+	{
+	public:
+		InvalidDay(const std::string& message="Invalid day value"): std::runtime_error(message){}
+	};
+
 	Date(Day d, Month m, Year y)
 		:day(d)
 		,month(m)
@@ -107,10 +126,12 @@ void main(){
 		d1.print();
 		Date d2(Day(11), Month::Mar, Year(1987));
 		d2.print();
+		Date d3(Day(32), Month::Feb, Year(1991));
+		d3.print();
 	}
-	catch (const Day::InvalidDay&) {
+	/*catch (const Day::InvalidDay&) {
 		cerr << "Error" << endl;
-	}
+	}*/
 	catch (const Year::InvalidYear&) {
 		cerr << "Error" << endl;
 	}
