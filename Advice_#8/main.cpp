@@ -14,6 +14,7 @@ bool isLeapYear(int year)
 	return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
 
+#define WIDTH os.width(10)
 enum  class Month
 {
 	Jan=1, Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec
@@ -21,18 +22,18 @@ enum  class Month
 std::ostream& operator<<(std::ostream& os, Month obj) {
 	
 	switch (obj) {
-	case Month::Jan: os.width(10); return os << "January";
-	case Month::Feb: os.width(10); return os << "February";
-	case Month::Mar: os.width(10); return os << "March";
-	case Month::Apr: os.width(10); return os << "April";
-	case Month::May: os.width(10); return os << "May";
-	case Month::Jun: os.width(10); return os << "June";
-	case Month::Jul: os.width(10); return os << "July";
-	case Month::Aug: os.width(10); return os << "August";
-	case Month::Sep: os.width(10); return os << "September";
-	case Month::Oct: os.width(10); return os << "October";
-	case Month::Nov: os.width(10); return os << "November";
-	case Month::Dec: os.width(10); return os << "December";
+	case Month::Jan: WIDTH; return os << "January";
+	case Month::Feb: WIDTH; return os << "February";
+	case Month::Mar: WIDTH; return os << "March";
+	case Month::Apr: WIDTH; return os << "April";
+	case Month::May: WIDTH; return os << "May";
+	case Month::Jul: WIDTH; return os << "July";
+	case Month::Jun: WIDTH; return os << "June";
+	case Month::Aug: WIDTH; return os << "August";
+	case Month::Sep: WIDTH; return os << "September";
+	case Month::Oct: WIDTH; return os << "October";
+	case Month::Nov: WIDTH; return os << "November";
+	case Month::Dec: WIDTH; return os << "December";
 	default:return os << "Invalid Month";
 	}
 }
