@@ -14,26 +14,25 @@ bool isLeapYear(int year)
 	return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
 
-
-
 enum  class Month
 {
 	Jan=1, Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec
 };
 std::ostream& operator<<(std::ostream& os, Month obj) {
+	
 	switch (obj) {
-	case Month::Jan: return os << "January";
-	case Month::Feb: return os << "February";
-	case Month::Mar: return os << "March";
-	case Month::Apr: return os << "April";
-	case Month::May: return os << "May";
-	case Month::Jun: return os << "June";
-	case Month::Jul: return os << "July";
-	case Month::Aug: return os << "August";
-	case Month::Sep: return os << "September";
-	case Month::Oct: return os << "October";
-	case Month::Nov: return os << "November";
-	case Month::Dec: return os << "December";
+	case Month::Jan: os.width(10); return os << "January";
+	case Month::Feb: os.width(10); return os << "February";
+	case Month::Mar: os.width(10); return os << "March";
+	case Month::Apr: os.width(10); return os << "April";
+	case Month::May: os.width(10); return os << "May";
+	case Month::Jun: os.width(10); return os << "June";
+	case Month::Jul: os.width(10); return os << "July";
+	case Month::Aug: os.width(10); return os << "August";
+	case Month::Sep: os.width(10); return os << "September";
+	case Month::Oct: os.width(10); return os << "October";
+	case Month::Nov: os.width(10); return os << "November";
+	case Month::Dec: os.width(10); return os << "December";
 	default:return os << "Invalid Month";
 	}
 }
@@ -63,7 +62,10 @@ public:
 	Year(bool) = delete;
 	~Year() {};
 };
-	std::ostream& operator<<(std::ostream& os, const Year& obj) {
+	std::ostream& operator<<(std::ostream& os, const Year& obj)
+	{
+		os.width(5); //задаем ширину поля вывода в символах
+		os << std::right; //задаем выравнивание поля
 		return os << obj.get_year();
 	}
 	class Day
@@ -96,7 +98,10 @@ public:
 		~Day() {};
 	};
 	std::ostream& operator<<(std::ostream& os, const Day& obj) {
-		return os << obj.get_day();
+		os.width(3);
+		os << std::left;
+		os << obj.get_day();
+		return os;
 	}
 
 class Date
@@ -112,13 +117,16 @@ public:
 		InvalidDay(const std::string& message="Invalid day value"): std::runtime_error(message){}
 	};
 
-	Date(Day d, Month m, Year y)
+	Date() : day(1), month(Month::Jan), year(2000) {} //конструктор по умолчанию 
+
+	 Date(Day d, Month m, Year y)
 		:day(d)
 		,month(m)
 		,year(y)
 	{
 
 	}
+	 
 	Date(Date&) = delete; //запрещаем копирование
 	Date& operator=(Date&) = delete; // запрещаем оператор присвоения
 
@@ -143,6 +151,10 @@ void main(){
 		d4.print();
 		Date d5(Day(22), Month::Apr, Year(1987));
 		d5.print();
+		Date d6{};
+		d6.print();
+
+		
 
 	}
 	/*catch (const Day::InvalidDay&) {
