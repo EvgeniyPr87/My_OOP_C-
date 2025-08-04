@@ -1,4 +1,6 @@
 ﻿// #8 Проектируйте свои классы так, чтобы их было сложно использовать неправильно
+// #3 Предпочитайте удаление фунций закрытым и неопределенным
+
 #include<iostream>
 using std::cout;
 using std::cin;
@@ -45,7 +47,8 @@ public:
 
 	bool is_valid()const
 	{
-		return year >= 0;
+		//return year >= 0;
+		return year >= 1900 && year <= 2025;
 	}
 	class InvalidYear : public std::runtime_error {
 	public:
@@ -56,6 +59,8 @@ public:
 			throw InvalidYear();
 	}
 	}
+	Year(char) = delete;
+	Year(bool) = delete;
 	~Year() {};
 };
 	std::ostream& operator<<(std::ostream& os, const Year& obj) {
@@ -64,6 +69,7 @@ public:
 	class Day
 	{
 		int day;
+
 	public:
 		int get_day()const { return day; }
 		//функция проверяет вхождение в диапазон даты
@@ -84,6 +90,8 @@ public:
 	public:
 
 		explicit Day(int d) :day(d) {}
+		Day(char) = delete;
+		Day(bool) = delete;
 
 		~Day() {};
 	};
@@ -111,6 +119,9 @@ public:
 	{
 
 	}
+	Date(Date&) = delete; //запрещаем копирование
+	Date& operator=(Date&) = delete; // запрещаем оператор присвоения
+
 	~Date() {};
 
 	void print()const {
@@ -128,6 +139,11 @@ void main(){
 		d2.print();
 		Date d3(Day(32), Month::Feb, Year(1991));
 		d3.print();
+		Date d4(Day(12),Month::Dec,Year(2025));
+		d4.print();
+		Date d5(Day(22), Month::Apr, Year(1987));
+		d5.print();
+
 	}
 	/*catch (const Day::InvalidDay&) {
 		cerr << "Error" << endl;
