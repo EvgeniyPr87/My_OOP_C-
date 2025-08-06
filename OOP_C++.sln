@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Delegating_Constructor", "D
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Static_C++", "Static_C++\Static_C++.vcxproj", "{E5832C7C-41B0-43BF-B17E-E4C76EC428EE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Aggregation_and_composition", "Aggregation_and_composition\Aggregation_and_composition.vcxproj", "{A11560C1-86ED-4934-91FB-E04929B2F371}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{E5832C7C-41B0-43BF-B17E-E4C76EC428EE}.Release|x64.Build.0 = Release|x64
 		{E5832C7C-41B0-43BF-B17E-E4C76EC428EE}.Release|x86.ActiveCfg = Release|Win32
 		{E5832C7C-41B0-43BF-B17E-E4C76EC428EE}.Release|x86.Build.0 = Release|Win32
+		{A11560C1-86ED-4934-91FB-E04929B2F371}.Debug|x64.ActiveCfg = Debug|x64
+		{A11560C1-86ED-4934-91FB-E04929B2F371}.Debug|x64.Build.0 = Debug|x64
+		{A11560C1-86ED-4934-91FB-E04929B2F371}.Debug|x86.ActiveCfg = Debug|Win32
+		{A11560C1-86ED-4934-91FB-E04929B2F371}.Debug|x86.Build.0 = Debug|Win32
+		{A11560C1-86ED-4934-91FB-E04929B2F371}.Release|x64.ActiveCfg = Release|x64
+		{A11560C1-86ED-4934-91FB-E04929B2F371}.Release|x64.Build.0 = Release|x64
+		{A11560C1-86ED-4934-91FB-E04929B2F371}.Release|x86.ActiveCfg = Release|Win32
+		{A11560C1-86ED-4934-91FB-E04929B2F371}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
