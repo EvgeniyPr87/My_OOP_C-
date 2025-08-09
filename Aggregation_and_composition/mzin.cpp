@@ -1,8 +1,12 @@
 #include<iostream>
+#include<vector>
 using std::cout;
 using std::cin;
 using std::endl;
 
+//#define CLASS_HUMAN
+
+#ifdef CLASS_HUMAN
 class Human
 {
 public:
@@ -24,12 +28,17 @@ private:
 	};
 	Brain brain;
 };
+#endif // CLASS_HUMAN
+
 
 void main()
 {
 	setlocale(LC_ALL, "");
 	 
+#ifdef CLASS_HUMAN
 	Human human;
 	human.Think();
+#endif // CLASS_HUMAN
+
 
 }
