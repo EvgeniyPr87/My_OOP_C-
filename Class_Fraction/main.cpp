@@ -1,7 +1,8 @@
-#include<iostream>
+ï»¿#include<iostream>
 #include<string>
 #include<cmath>
 #include<numeric>
+#include<algorithm>
 #include<sstream>
 #include<stdexcept>
 using std::cout;
@@ -9,11 +10,18 @@ using std::cin;
 using std::endl;
 // + - * / += -= == ++ -- > < >= <=
 //#define OLD_STYLE
+class Fraction;
+Fraction operator *(Fraction left, Fraction right);
+Fraction operator /(const Fraction& left, const Fraction& right);
+Fraction operator+(Fraction left, Fraction right);
+Fraction operator-(Fraction left, Fraction right);
+
+
 class Fraction
 {
-	int integer;//öåëàÿ ÷àñòü
-	int numerator;//÷èñëèòåëü
-	int denominator;//çíàìåíàòåëü
+	int integer;//Ñ†ÐµÐ»Ð°Ñ Ñ‡Ð°ÑÑ‚ÑŒ
+	int numerator;//Ñ‡Ð¸ÑÐ»Ð¸Ñ‚ÐµÐ»ÑŒ
+	int denominator;//Ð·Ð½Ð°Ð¼ÐµÐ½Ð°Ñ‚ÐµÐ»ÑŒ
 
 public:
 							//Getters:
@@ -67,8 +75,35 @@ Fraction& operator =(const Fraction& other) {
 	}
 	return *this;
 }
+//Operator *=
+	Fraction& operator*= (const Fraction & other) {return *this = *this * other;}
+	
+//Operator /=
+	Fraction& operator /=(const Fraction& other) {return *this = *this / other;}
+
+//Operator +=
+	Fraction& operator+=(const Fraction& other) {return *this = *this + other;}
+
+//Operator -=
+	Fraction& operator-= (const Fraction& other){return *this = *this - other;}
+
+
+	// Incriment/Decriment:
+	//Operator ++
+	Fraction& operator++() { integer++; return *this; }//Prefics
+	Fraction& operator ++(int) { Fraction old = *this; integer++; return old; } //Postfix
+
+	//Operator --
+	Fraction& operator--() { integer--; return *this; }//Prefics
+	Fraction& operator--(int) { Fraction old = *this; integer--; return old; }//Postfix
+
+	//Type-cast operators:
+	explicit operator int()const { return integer + numerator / denominator;}
+	explicit operator double()const { return integer + (double)numerator / denominator; }
+
+
 								// Metods:
-// ìåòîä ïåðåâîäèò äðîáü â íåïðàâèëüíóþ
+// Ð¼ÐµÑ‚Ð¾Ð´ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´Ð¸Ñ‚ Ð´Ñ€Ð¾Ð±ÑŒ Ð² Ð½ÐµÐ¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½ÑƒÑŽ
 Fraction& to_improper() {
 	if (denominator == 0) {
 		throw std::invalid_argument("Denominator cannot be zero!");
@@ -86,24 +121,24 @@ Fraction& to_improper() {
 	return *this;
 }
 
-//ìåòîä ïåðåâîäèò äðîáü â ïðàâèëüíóþ
+//Ð¼ÐµÑ‚Ð¾Ð´ Ð¿ÐµÑ€ÐµÐ²Ð¾Ð´Ð¸Ñ‚ Ð´Ñ€Ð¾Ð±ÑŒ Ð² Ð¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½ÑƒÑŽ
 Fraction& to_proper() {
 	if (denominator == 0) {
 		throw std::invalid_argument("Denominator cannot be zero!");
 	}
-	//îïðåäåëÿåì çíàê äðîáè
+	//Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»ÑÐµÐ¼ Ð·Ð½Ð°Ðº Ð´Ñ€Ð¾Ð±Ð¸
 	int sign = 1;
 	if (integer < 0 || numerator < 0) {
 		sign = -1;
 	}
-	//àáñîëþòíîå çíà÷åíèå
+	//Ð°Ð±ÑÐ¾Ð»ÑŽÑ‚Ð½Ð¾Ðµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ
 	integer = std::abs(integer);
 	numerator = std::abs(numerator);
 
 	integer += numerator / denominator;
 	numerator %= denominator;
 
-	// âîçâðàùàåì çíàê
+	// Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÐ¼ Ð·Ð½Ð°Ðº
 	integer *= sign;
 	numerator *= sign;
 
@@ -138,18 +173,30 @@ Fraction& reduction() {
 	if (denominator == 0) {
 		throw std::invalid_argument("Denominator cannot be zero!");
 	}
-	//ïîëó÷àåì àáñîëþòíîå çíà÷åíèå
+	//Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ Ð°Ð±ÑÐ¾Ð»ÑŽÑ‚Ð½Ð¾Ðµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ
 	int num = std::abs(numerator);
 	int den = std::abs(denominator);
 
-	//âû÷èñëÿåì ÍÎÄ
+	//Ð²Ñ‹Ñ‡Ð¸ÑÐ»ÑÐµÐ¼ ÐÐžÐ”
 	int gcd = std::gcd(num, den);
 
-	//ñîêðàùàåì äðîáü
+	//ÑÐ¾ÐºÑ€Ð°Ñ‰Ð°ÐµÐ¼ Ð´Ñ€Ð¾Ð±ÑŒ
 	numerator /= gcd;
 	denominator /= gcd;
 
 	return *this;
+}
+
+Fraction inverted()const
+{
+	Fraction inverted = *this;
+	inverted.to_improper();
+	if (inverted.numerator == 0)
+	{
+		throw std::invalid_argument("Cannot invert a fraction with a zero numerator.");
+	}
+	std::swap(inverted.numerator, inverted.denominator);
+	return inverted;
 }
 
 };
@@ -158,7 +205,7 @@ Fraction& reduction() {
 							// Operators out:
 
 // operator *
-Fraction operator *(Fraction& left,Fraction& right)
+Fraction operator *( Fraction left, Fraction right)
 {
 	left.to_improper();
 	right.to_improper();
@@ -166,7 +213,78 @@ Fraction operator *(Fraction& left,Fraction& right)
 	return Fraction(
 		left.get_numerator() * right.get_numerator(),
 		left.get_denominator() * right.get_denominator()
-	);
+	).to_proper().reduction();
+}
+
+Fraction operator /( const Fraction& left,const Fraction& right)
+{
+	return (left * right.inverted()).to_proper(); 
+}
+
+Fraction operator+( Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+
+	return Fraction
+	(
+		(left.get_numerator() * right.get_denominator()) + (right.get_numerator() * left.get_denominator()),
+
+		left.get_denominator() * right.get_denominator()
+	).to_proper().reduction();
+}
+
+Fraction operator-(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+
+	return Fraction
+	(
+		(left.get_numerator() * right.get_denominator()) - (right.get_numerator() * left.get_denominator()),
+		left.get_denominator() * right.get_denominator()
+	).to_proper().reduction();
+}
+
+//Comparison operators(Ð¾Ð¿ÐµÑ€Ð°Ñ‚Ð¾Ñ€Ñ‹ ÑÑ€Ð°Ð²Ð½ÐµÐ½Ð¸Ñ):
+
+bool operator ==(Fraction left, Fraction right) {
+	left.to_improper();
+	right.to_improper();
+
+	return 
+		left.get_numerator() * right.get_denominator() ==
+		right.get_numerator() * left.get_denominator();
+}
+
+bool operator !=(const Fraction& left, const Fraction& right)
+{
+	return !(left == right);
+}
+
+bool operator>(Fraction left,Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return
+		left.get_numerator() * right.get_denominator() >
+		right.get_numerator() * left.get_denominator();
+}
+bool operator<(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	return
+		left.get_numerator() * right.get_denominator() >
+		right.get_numerator() * left.get_denominator();
+}
+bool operator>=(const Fraction& left, const Fraction& right)
+{
+	return !(left < right);
+}
+bool operator<=(const Fraction& left, const Fraction& right)
+{
+	return !(left > right);
 }
 
 std::ostream& operator <<(std::ostream& os, const Fraction& obj) {
@@ -242,8 +360,31 @@ std::istream& operator>>(std::istream& is, Fraction obj) {
 
 void main() {
 	setlocale(LC_ALL, "");
-	Fraction fraction1;
-	cout << "Ââåäèòå äðîáü: "; cin >> fraction1;
-	cout << fraction1;
+	Fraction fraction1(2,9);
+	//cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð´Ñ€Ð¾Ð±ÑŒ: "; cin >> fraction1;
+	//cout << fraction1;
+	Fraction fraction2(1, 2, 3);
+	Fraction fraction3 = fraction1 * fraction2;
+	cout << fraction3 << endl;
+	Fraction fr = fraction1 / fraction2;
+	cout << fr<<endl;
+	fr *= fraction1;
+	cout << fr << endl;
+	++fraction2;
+	cout << fraction2 << endl;
+	fraction2++;
+	cout << fraction2 << endl;
+	--fraction2;
+	cout << fraction2 << endl;
+	fraction2--;
+	cout << fraction2 << endl;
+	int x = static_cast<int> (fraction2);
+	cout << x << endl;
+	double y = static_cast<double>(fraction2);
+	cout << y << endl;
+	Fraction fr3 = fraction1 + fraction1;
+	cout << fr3 << endl;
+
+
 	
 }
